@@ -27,6 +27,12 @@ app.use(cors());
 
 /* ROUTES */
 
+app.use((req, res, next) => {
+    // Set Cache-Control headers to disable caching
+    res.setHeader('Cache-Control', 'no-store');
+    next();
+  });
+
 app.use("/general", generalRoutes)
 app.use("/client", clientRoutes)
 app.use("/management", managementRoutes)
