@@ -7,15 +7,15 @@ export const getProducts = async (req, res) => {
     const productStats = await ProductStat.find();
 
     const productsWithStats = products.map((product) => {
-      const stat = productStats.find(
-        (stats) => stats.productId === product._id,
-      );
+      const stat = productStats.map((stats) => {
+        return product._id === stats.productId;
+      });
       return {
         product,
         stat,
       };
     });
-    res.json(productStats);
+    res.json(productsWithStats);
   } catch (error) {
     res.json(error);
   }
