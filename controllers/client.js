@@ -8,7 +8,10 @@ export const getProducts = async (req, res) => {
 
     const productsWithStats = products.map((product) => {
       const stat = productStats.map((stats) => {
-        return product._id === stats.productId;
+        return {
+          productId: product._id,
+          statId: stats.id,
+        };
       });
       return {
         product,
