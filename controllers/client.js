@@ -7,7 +7,7 @@ export const getProducts = async (req, res) => {
     const productStats = await ProductStat.find();
 
     const productsWithStats = products.map((product) => {
-      const stat = productStats.map((stats) => {
+      const stat = productStats.find((stats) => {
         return product._id.toString() === stats.productId.toString();
       });
       return {
