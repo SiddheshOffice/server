@@ -11,7 +11,7 @@ export const getProducts = async (req, res) => {
         return product._id.toString() === stats.productId.toString();
       });
       return {
-        ...product,
+        ...product._doc,
         stat,
       };
     });
