@@ -1,5 +1,6 @@
 import express from 'express';
 
-const clientRoutes = express.Router()
-
-export default clientRoutes;
+const router = express.Router()
+router.get("/products", getProducts)
+ 
+export default router;
