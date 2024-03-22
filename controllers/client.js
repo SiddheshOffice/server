@@ -15,7 +15,7 @@ export const getProducts = async (req, res) => {
         stat,
       };
     });
-    res.json(productsWithStats);
+    res.json(productStats);
   } catch (error) {
     res.json(error);
   }
