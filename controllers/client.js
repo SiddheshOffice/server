@@ -5,18 +5,16 @@ export const getProducts = async (req, res) => {
   try {
     const products = await Product.find();
 
-    // const productsWithStats = await promise.all(
-    //   products.map(async (product) => {
-    //     const stat = await ProductStat.find({
-    //       productId: product._id,
-    //     });
-    //     return {
-    //       ...product._doc,
-    //       stat,
-    //     };
-    //   }),
-    // );
-    res.json(products);
+    const productsWithStats = products.map(async (product) => {
+      const stat = await ProductStat.find({
+        productId: product._id,
+      });
+      return {
+        product,
+        stat,
+      };
+    });
+    res.json(productsWithStats);
   } catch (error) {
     res.json(error);
   }
