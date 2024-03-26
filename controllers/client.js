@@ -1,7 +1,7 @@
 import Product from "../models/Product.js";
 import ProductStat from "../models/ProductStat.js";
 import Transaction from "../models/Transaction.js";
-import User from "../models/User.js"
+import User from "../models/User.js";
 
 export const getProducts = async (req, res) => {
   try {
@@ -23,42 +23,45 @@ export const getProducts = async (req, res) => {
   }
 };
 
-export const getCustomers = async (req, res) =>{
+export const getCustomers = async (req, res) => {
   try {
-    const customers = await User.find({role: "user"}).select("-password");
+    const customers = await User.find({ role: "user" }).select("-password");
     res.json(customers);
   } catch (error) {
     res.json(error);
   }
-
-}
-export const getTransactions = async (req, res) =>{
+};
+export const getTransactions = async (req, res) => {
   try {
-    const {page=1, pageSize=20, sort=null, search = "" } = req.query;
-    const generateSort = ()=>{
+    const { page = 1, pageSize = 20, sort = null, search = "" } = req.query;
+    const generateSort = () => {
       const sortParsed = JSON.parse(sort);
       const sortFormatted = {
-        [sortParsed.field] : sortParsed.sort == "asc"? 1: -1
-      }
+        [sortParsed.field]: sortParsed.sort = "asc" ? 1 : -1,
+      };
       return sortFormatted;
-    }
+    };
 
-    const sortFormatted = Boolean(sort)? generateSort(): {};
+    const sortFormatted = Boolean(sort) ? generateSort() : {};
 
     const transactions = await Transaction.find({
-      $or: [{cost: {$regex: new RegExp(search, "i")}},
-    {$userId: {$regex: new RegExp(search, "i")}}]
-    }).sort(sortFormatted).skip(page*pageSize).limit(pageSize);
+      $or: [
+        { cost: { $regex: new RegExp(search, "i") } },
+        { $userId: { $regex: new RegExp(search, "i") } },
+      ],
+    })
+      .sort(sortFormatted)
+      .skip(page * pageSize)
+      .limit(pageSize);
 
     const total = await Transaction.countDocuments({
-      name: {$regex: search, $options: "i"}
-    })
+      name: { $regex: search, $options: "i" },
+    });
     res.json({
       transactions,
-      total
+      total,
     });
   } catch (error) {
     res.json(error);
   }
-}
-
+};
