@@ -1,7 +1,9 @@
+const getCountryISO3 = require("country-iso-2-to-3");
 import Product from "../models/Product.js";
 import ProductStat from "../models/ProductStat.js";
 import Transaction from "../models/Transaction.js";
 import User from "../models/User.js";
+
 
 export const getProducts = async (req, res) => {
   try {
@@ -31,6 +33,8 @@ export const getCustomers = async (req, res) => {
     res.json(error);
   }
 };
+
+
 export const getTransactions = async (req, res) => {
   try {
     const { page = 1, pageSize = 20, sort = null, search = "" } = req.query;
@@ -60,3 +64,26 @@ export const getTransactions = async (req, res) => {
     res.json(error);
   }
 };
+
+
+export const getGeography = async (req, res)=>{
+  try {
+    const users = User.find();
+    const mappedLocations = users.reduce((acc, {country})=> {
+      const countryISO3 = getCountryISO3(country);
+      if (!acc[countryISO3]) {
+        acc[countryISO3] = 0;
+      }
+      acc[countryISO3]++;
+      return acc;
+    }, {})
+    const formattedLocations = Object.entries(mappedLocations).map(
+      ([country, count])=> {
+        return {id: country, value: count}
+      }
+    )
+    res.json(formattedLocations)
+  } catch (error) {
+    res.json(error);
+  }
+}
