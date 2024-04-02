@@ -77,6 +77,7 @@ export const getGeography = async (req, res) => {
       acc[countryISO3]++;
       return acc;
     }, {});
+    console.log(mappedLocations);
     const formattedLocations = Object.entries(mappedLocations).map(
       ([country, count]) => {
         return { id: country, value: count };
